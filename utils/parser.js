@@ -29,11 +29,10 @@ const buildClassEmbed = function(data) {
   return embed;
 }
 
-const fetchCourseClasses = async function(message, course = '') {
+const fetchCourseClasses = async function(course = '') {
   console.log(`attempting to load ${course.toLowerCase()}.json`);
-  message.channel.send({ content: 'Loading classes...' })
 
-  if (Date.now() - await classLastUpdated(course.toLowerCase()) > 10000)
+  if (Date.now() - await classLastUpdated(course.toLowerCase()) > 30000)
     updateClass(course.toLowerCase());
 
   let raw = fs.readFileSync(`./raw/${course.toLowerCase()}.json`);

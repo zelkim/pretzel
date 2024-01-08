@@ -4,7 +4,7 @@ module.exports = {
         description: 'Get ping of the bot',
         usage: `!ping`,
     },
-    async run (bot,message,args) {
+    async run(bot, message, args) {
         message.channel.send("My ping is \`" + bot.ws.ping + " ms\`");
     }
 }

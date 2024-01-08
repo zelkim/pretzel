@@ -8,9 +8,11 @@ module.exports = {
     usage: `!open [COURSE CODE]`,
   },
   async run(bot, message, args) {
+    message.channel.send({ content: 'Loading classes...' })
+
     const { EmbedBuilder } = require('discord.js')
     const parser = require.main.require('./utils/parser.js')
-    let response = await parser.fetchCourseClasses(message, args[0].toLowerCase());
+    let response = await parser.fetchCourseClasses(args[0].toLowerCase());
 
     if ((!Array.isArray(response) && response.error)) {
       const embed = new EmbedBuilder()
@@ -41,29 +43,6 @@ module.exports = {
     }
     if (embeds != 0) await message.reply({ embeds: embeds })
 
-    function date_diff(d1, d2) {
-      let date1 = new Date(d1)
-      let date2 = new Date(d2)
-      let Difference_In_Time = date1.getTime() - date2.getTime();
-      let months = 0;
-      let days = 0;
-      let hours = 0;
-      let minutes = 0;
-      let seconds = 0;
-      months = Math.round(Difference_In_Time / (1000 * 3600 * 24 * 30))
-      days = Math.round(Difference_In_Time / (1000 * 3600 * 24));
-      hours = Math.round(Difference_In_Time / (1000 * 3600));
-      minutes = Math.round(Difference_In_Time / (1000 * 60));
-      seconds = Math.round(Difference_In_Time / 1000);
-      let final_date = '';
-      if (months > 0) final_date = final_date + months.toString() + 'months, ';
-      if (days > 0) final_date = final_date + days.toString() + 'days, ';
-      if (hours > 0) final_date = final_date + hours.toString() + 'hours, ';
-      if (minutes > 0) final_date = final_date + minutes.toString() + 'minutes, ';
-      final_date = final_date + seconds.toString() + 'seconds ';
-      return final_date + 'ago';
-    }
-    console.log(`classLastUPdated: ${await parser.classLastUpdated(args[0].toLowerCase())}`)
 
     const embed = new EmbedBuilder()
       .setTitle(`${count} open class(es)`)
