@@ -8,20 +8,10 @@ const buildClassEmbed = function(data) {
     .setDescription(`ID: \`${data.id}\` | Capacity: \`${data.current_slots}/${data.max_slots}\` | Type: \`${data.type.trim()}\``)
     .addFields(
       {
-        name: "Days",
-        value: `\`${data.schedules.map((a) => `${a.days}\n`)}\``,
-        inline: true
-      },
-      {
-        name: "Time",
-        value: `\`${data.schedules.map((a) => `${a.time}\n`)}\``,
-        inline: true
-      },
-      {
-        name: "Professor",
-        value: `\`${data.schedules.map((a) => `${a.prof}\n`)}\``,
-        inline: true
-      },
+        name: "Schedules:",
+        value: `\`\`\`${data.schedules.map((a) => `${a.days} - ${a.time} - ${a.prof}\n`).join('')}\`\`\``,
+        inline: false
+      }
     )
     .setThumbnail("https://altdsi.dlsu.edu.ph/uploads/img/logo/dlsulogowhite.png")
     .setColor("#77fd92");
@@ -144,40 +134,44 @@ const classLastUpdated = async function(classname) {
 
 const updateClass = async function(classname) {
   console.log('updateClass: started')
-  await PythonShell.run('./scraper.py', { args: classname }).then(messages => {
-    for (let i = 0; i < messages.length; i++) console.log(messages[i])
-  });
-  console.log('updateClass:PythonShell.run: post await')
   try {
-    let courseConfig = JSON.parse(fs.readFileSync('./courses.json'))
-    console.log('updateClass:PythonShell.run: passed readFileSync')
+    await PythonShell.run('./scraper.py', { args: classname }).then(messages => {
+      for (let i = 0; i < messages.length; i++) console.log(messages[i])
+    });
+    console.log('updateClass:PythonShell.run: post await')
+    try {
+      let courseConfig = JSON.parse(fs.readFileSync('./courses.json'))
+      console.log('updateClass:PythonShell.run: passed readFileSync')
 
-    let index = -1;
-    for (let i = 0; i < courseConfig.length; i++) {
-      if (courseConfig[i][`name`] === classname.toLowerCase().trim()) {
-        index = i;
-        break;
+      let index = -1;
+      for (let i = 0; i < courseConfig.length; i++) {
+        if (courseConfig[i][`name`] === classname.toLowerCase().trim()) {
+          index = i;
+          break;
+        }
+      }
+      console.log('updateClass:PythonShell.run: index = ' + index)
+      if (index == -1) {
+        courseConfig.push({
+          'name': classname.toLowerCase().trim(),
+          'last_updated': Date.now()
+        })
+      }
+      else
+        courseConfig[index][`last_updated`] = Date.now();
+
+      console.log('updateClass:PythonShell.run: passed setting last_updated')
+      fs.writeFileSync('courses.json', JSON.stringify(courseConfig))
+      console.log('updateClass:PythonShell.run: passed writeFileSync')
+    } catch (err) {
+      console.log('updateClass:ERROR: ' + err)
+      if (err.code === 'ENOENT') {
+        fs.writeFileSync('courses.json', '[]');
+        return updateClass(classname);
       }
     }
-    console.log('updateClass:PythonShell.run: index = ' + index)
-    if (index == -1) {
-      courseConfig.push({
-        'name': classname.toLowerCase().trim(),
-        'last_updated': Date.now()
-      })
-    }
-    else
-      courseConfig[index][`last_updated`] = Date.now();
-
-    console.log('updateClass:PythonShell.run: passed setting last_updated')
-    fs.writeFileSync('courses.json', JSON.stringify(courseConfig))
-    console.log('updateClass:PythonShell.run: passed writeFileSync')
   } catch (err) {
-    console.log('updateClass:ERROR: ' + err)
-    if (err.code === 'ENOENT') {
-      fs.writeFileSync('courses.json', '[]');
-      return updateClass(classname);
-    }
+    console.log('ERROR OCCURED: ' + JSON.stringify(err));
   }
 }
 
