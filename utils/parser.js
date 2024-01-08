@@ -33,8 +33,8 @@ const fetchCourseClasses = async function(message, course = '') {
   console.log(`attempting to load ${course.toLowerCase()}.json`);
   message.channel.send({ content: 'Loading classes...' })
 
-  // if (classLastUpdated(course.toLowerCase() > 5))
-  await updateClass(course.toLowerCase());
+  if (Date.now() - await classLastUpdated(course.toLowerCase()) > 10000)
+    updateClass(course.toLowerCase());
 
   let raw = fs.readFileSync(`./raw/${course.toLowerCase()}.json`);
 
@@ -76,7 +76,7 @@ const createClassObject = function(data, index = 0) {
       days: data[index + 6],
       time: data[index + 8],
       room: data[index + 10],
-      prof: data[index + 19]
+      prof: data[index + 19] ?? "N/A"
     }
   )
 
@@ -105,7 +105,7 @@ const createClassObject = function(data, index = 0) {
           days: data[index + 29],
           time: data[index + 31],
           room: data[index + 30],
-          prof: data[index + 42]
+          prof: data[index + 42] ?? "N/A"
         }
       )
       console.log('passed else 1')
@@ -116,27 +116,70 @@ const createClassObject = function(data, index = 0) {
 }
 
 const classLastUpdated = async function(classname) {
-  let config = fs.readFileSync('class_data.json')
-  let classInfo = JSON.parse(config)
-  let index = -1;
+  console.log('classLastUpdated: started')
+  try {
+    console.log('classLastUpdated: try')
+    let config = fs.readFileSync('./courses.json')
+    let classInfo = JSON.parse(config)
+    let index = -1;
 
-  for (let i = 0; i < classInfo.length; i++) {
-    if (classInfo[i].name === classname) index = i;
+    for (let i = 0; i < classInfo.length; i++) {
+      if (classInfo[i].name === classname.toString().toLowerCase().trim()) index = i;
+    }
+    console.log('classLastUpdated: index = ' + index)
+    if (index == -1) {
+      console.log('classLastUpdated: index = -1')
+      await updateClass(classname);
+      return await classLastUpdated(classname);
+    }
+    return classInfo[index].last_updated;
+
+  } catch (err) {
+    console.log('classLastUpdated: ERROR: ' + err)
+    if (err.code === 'ENOENT') {
+      fs.writeFileSync('courses.json', '[]');
+      return await classLastUpdated(classname);
+    }
   }
-
-  if (index == -1) {
-    await updateClass(classname);
-    return classLastUpdated(classname);
-  }
-
-  return classInfo[i].last_updated;
 }
 
 const updateClass = async function(classname) {
+  console.log('updateClass: started')
   await PythonShell.run('./scraper.py', { args: classname }).then(messages => {
     for (let i = 0; i < messages.length; i++) console.log(messages[i])
-  })
-  return 1;
+  });
+  console.log('updateClass:PythonShell.run: post await')
+  try {
+    let courseConfig = JSON.parse(fs.readFileSync('./courses.json'))
+    console.log('updateClass:PythonShell.run: passed readFileSync')
+
+    let index = -1;
+    for (let i = 0; i < courseConfig.length; i++) {
+      if (courseConfig[i][`name`] === classname.toLowerCase().trim()) {
+        index = i;
+        break;
+      }
+    }
+    console.log('updateClass:PythonShell.run: index = ' + index)
+    if (index == -1) {
+      courseConfig.push({
+        'name': classname.toLowerCase().trim(),
+        'last_updated': Date.now()
+      })
+    }
+    else
+      courseConfig[index][`last_updated`] = Date.now();
+
+    console.log('updateClass:PythonShell.run: passed setting last_updated')
+    fs.writeFileSync('courses.json', JSON.stringify(courseConfig))
+    console.log('updateClass:PythonShell.run: passed writeFileSync')
+  } catch (err) {
+    console.log('updateClass:ERROR: ' + err)
+    if (err.code === 'ENOENT') {
+      fs.writeFileSync('courses.json', '[]');
+      return updateClass(classname);
+    }
+  }
 }
 
 function __class_reset() {
@@ -155,4 +198,4 @@ function is_empty(str) {
   return str === " " || str === "" || !str;
 }
 
-module.exports = { buildClassEmbed, createClassObject, fetchCourseClasses }
+module.exports = { buildClassEmbed, createClassObject, fetchCourseClasses, classLastUpdated, updateClass }
