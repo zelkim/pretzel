@@ -20,13 +20,12 @@ module.exports = {
         .setDescription("Invalid course id. \n**USAGE:** `!open [COURSE CODE (Ex: LCFILIA)]`")
         .setColor("#f50000")
         .setFooter({
-          text: "Our.LaSalle - Developed by zel.",
+          text: "Pretzel - Developed by zel.",
         });
       await message.reply({ embeds: [embed] });
       return;
     }
 
-    console.log(`response: ${response}`)
     let embeds = [];
     let count = 0, _count_2 = 0;
     for (let i = 0; i < response.length; i++) {
@@ -49,7 +48,7 @@ module.exports = {
       .setDescription(`There are a total of \`${count}\` available class(es) to enlist for \`${args[0].toUpperCase()}\`` +
         `\nLast Updated: ${dayjs(Date.now()).diff(dayjs(await parser.classLastUpdated(args[0].toLowerCase())), 'seconds')} seconds ago.`)
       .setFooter({
-        text: "Our.LaSalle - Developed by zel.",
+        text: "Pretzel - Developed by zel.",
       })
       .setColor("#77fd92");
 

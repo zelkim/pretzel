@@ -20,14 +20,12 @@ const buildClassEmbed = function(data) {
 }
 
 const fetchCourseClasses = async function(course = '') {
-  console.log(`attempting to load ${course.toLowerCase()}.json`);
 
   if (Date.now() - await classLastUpdated(course.toLowerCase()) > 30000)
     updateClass(course.toLowerCase());
 
   let raw = fs.readFileSync(`./raw/${course.toLowerCase()}.json`);
 
-  console.log(`${course.toLowerCase()}.json loaded`);
   let rawdata = JSON.parse(raw.toString());
 
   var data = [];
@@ -37,7 +35,6 @@ const fetchCourseClasses = async function(course = '') {
       data.push(createClassObject(rawdata, i));
     }
   }
-  console.log(`final data list: ${JSON.stringify(data)}`);
   return data;
 }
 
@@ -51,7 +48,6 @@ const createClassObject = function(data, index = 0) {
 
   let currentItem = __class_reset();
 
-  console.log(`data_process_object: ${JSON.stringify(data[index])}`)
   currentItem['id'] = data[index];
   currentItem['class'] = data[index + 2];
   currentItem['type'] = data[index + 16];
@@ -124,10 +120,8 @@ const updateClass = async function(classname) {
     await PythonShell.run('./scraper.py', { args: classname }).then(messages => {
       for (let i = 0; i < messages.length; i++) console.log(messages[i])
     });
-    console.log('updateClass:PythonShell.run: post await')
     try {
       let courseConfig = JSON.parse(fs.readFileSync('./courses.json'))
-      console.log('updateClass:PythonShell.run: passed readFileSync')
 
       let index = -1;
       for (let i = 0; i < courseConfig.length; i++) {
@@ -136,7 +130,6 @@ const updateClass = async function(classname) {
           break;
         }
       }
-      console.log('updateClass:PythonShell.run: index = ' + index)
       if (index == -1) {
         courseConfig.push({
           'name': classname.toLowerCase().trim(),
@@ -146,11 +139,8 @@ const updateClass = async function(classname) {
       else
         courseConfig[index][`last_updated`] = Date.now();
 
-      console.log('updateClass:PythonShell.run: passed setting last_updated')
       fs.writeFileSync('courses.json', JSON.stringify(courseConfig))
-      console.log('updateClass:PythonShell.run: passed writeFileSync')
     } catch (err) {
-      console.log('updateClass:ERROR: ' + err)
       if (err.code === 'ENOENT') {
         fs.writeFileSync('courses.json', '[]');
         return updateClass(classname);

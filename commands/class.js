@@ -10,7 +10,6 @@ module.exports = {
         const { EmbedBuilder } = require('discord.js')
         message.channel.send("Loading class...");
 
-        console.log('args.length = ' + args.length)
         if (args.length < 2) {
             const embed = new EmbedBuilder()
                 .setTitle("Invalid Syntax")
@@ -29,18 +28,14 @@ module.exports = {
 
             courseContent = await parser.fetchCourseClasses(course)
 
-            console.log('courseContent: ' + JSON.stringify(courseContent))
-
             let index = -1;
             for (let i = 0; i < courseContent.length; i++) {
-                console.log(`courseContent[${i}] = ${JSON.stringify(courseContent[i])}`)
                 if (courseContent[i].id === _class.toString() || courseContent[i].section.toLowerCase() === _class.toString()) {
                     index = i;
                     break;
                 }
             }
 
-            console.log('class: index: ' + index)
             if (index == -1) {
                 const embed = new EmbedBuilder()
                     .setTitle("Class not found")
@@ -51,7 +46,6 @@ module.exports = {
                 return;
             }
 
-            console.log('class.js: passed')
             await message.reply({ embeds: [parser.buildClassEmbed(courseContent[index])] })
 
         }
