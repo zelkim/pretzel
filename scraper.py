@@ -6,6 +6,7 @@ import sys
 import json
 import time
 import random
+from pathlib import Path
 
 async def main(course: str, id: str):
     options = webdriver.ChromeOptions()
@@ -19,7 +20,9 @@ async def main(course: str, id: str):
         elem = await driver.find_element(By.XPATH, '/html/body/table[4]/tbody/tr/td/table/tbody/tr[3]/td/table/tbody/tr/td[2]/form/table', timeout=10)
         print("FOUND ELEM");
         content = str(await elem.text).replace('\xa0\xa0', '').split("\n")
-        with open('raw/'+course.lower()+'.json', 'w+') as f:
+        path = Path('raw/'+course.lower()+'.json');
+        path.touch(exist_ok=True)
+        with open(path, 'w+') as f:
             f.write(json.dumps(content))
 
 for i in range(1, len(sys.argv)):
