@@ -21,10 +21,10 @@ const buildClassEmbed = function(data) {
 
 const fetchCourseClasses = async function(course = '') {
 
-  if (Date.now() - await classLastUpdated(course.toLowerCase()) > 30000)
-    updateClass(course.toLowerCase());
+  if (Date.now() - await classLastUpdated(course.toLowerCase().trim()) > 30000)
+    await updateClass(course.toLowerCase().trim());
 
-  let raw = fs.readFileSync(`./raw/${course.toLowerCase()}.json`);
+  let raw = fs.readFileSync(`./raw/${course.toLowerCase().trim()}.json`);
 
   let rawdata = JSON.parse(raw.toString());
 
@@ -101,15 +101,15 @@ const classLastUpdated = async function(classname) {
       if (classInfo[i].name === classname.toString().toLowerCase().trim()) index = i;
     }
     if (index == -1) {
-      await updateClass(classname);
-      return await classLastUpdated(classname);
+      await updateClass(classname.toLowerCase().trim());
+      return await classLastUpdated(classname.toLowerCase().trim());
     }
     return classInfo[index].last_updated;
 
   } catch (err) {
     if (err.code === 'ENOENT') {
       fs.writeFileSync('courses.json', '[]');
-      return await classLastUpdated(classname);
+      return await classLastUpdated(classname.toLowerCase().trim());
     }
   }
 }
@@ -143,7 +143,7 @@ const updateClass = async function(classname) {
     } catch (err) {
       if (err.code === 'ENOENT') {
         fs.writeFileSync('courses.json', '[]');
-        return updateClass(classname);
+        return updateClass(classname.toLowerCase().trim());
       }
     }
   } catch (err) {
