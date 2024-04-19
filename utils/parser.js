@@ -51,8 +51,6 @@ const createClassObject = function(data, index = 0) {
 
   let currentItem = __class_reset();
 
-  console.log('passed object initialization');
-
   console.log(`data_process_object: ${JSON.stringify(data[index])}`)
   currentItem['id'] = data[index];
   currentItem['class'] = data[index + 2];
@@ -69,14 +67,10 @@ const createClassObject = function(data, index = 0) {
     }
   )
 
-  console.log('passed initial object variable declaration')
-
   // checking these indexes to see if there is a second schedule 
   if (!Number(data[index + 20]) && !Number(data[index + 20])) {
-    console.log('entered if clause 1');
     if (is_empty(data[index + 19])) // if the class does not have a prof on the default schedule
     {
-      console.log('entered if clause 2');
       currentItem['schedules'].push(
         {
           days: data[index + 26],
@@ -85,10 +79,8 @@ const createClassObject = function(data, index = 0) {
           prof: "N/A"
         }
       )
-      console.log('passed if clause 2');
     }
     else {
-      console.log('entered else 1')
       currentItem['schedules'].push(
         {
           days: data[index + 29],
@@ -97,17 +89,14 @@ const createClassObject = function(data, index = 0) {
           prof: data[index + 42] ?? "N/A"
         }
       )
-      console.log('passed else 1')
     }
   }
-  console.log('parsed item: ' + JSON.stringify(currentItem));
+  // console.log('parsed item: ' + JSON.stringify(currentItem));
   return currentItem;
 }
 
 const classLastUpdated = async function(classname) {
-  console.log('classLastUpdated: started')
   try {
-    console.log('classLastUpdated: try')
     let config = fs.readFileSync('./courses.json')
     let classInfo = JSON.parse(config)
     let index = -1;
@@ -115,16 +104,13 @@ const classLastUpdated = async function(classname) {
     for (let i = 0; i < classInfo.length; i++) {
       if (classInfo[i].name === classname.toString().toLowerCase().trim()) index = i;
     }
-    console.log('classLastUpdated: index = ' + index)
     if (index == -1) {
-      console.log('classLastUpdated: index = -1')
       await updateClass(classname);
       return await classLastUpdated(classname);
     }
     return classInfo[index].last_updated;
 
   } catch (err) {
-    console.log('classLastUpdated: ERROR: ' + err)
     if (err.code === 'ENOENT') {
       fs.writeFileSync('courses.json', '[]');
       return await classLastUpdated(classname);
