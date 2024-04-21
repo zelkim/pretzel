@@ -30,8 +30,9 @@ const fetchCourseClasses = async function(course = '') {
 
   var data = [];
 
+  console.log(rawdata);
   for (let i = 0; i < rawdata.length; i++) {
-    if (Number(rawdata[i]) > 999) {
+    if (Number(rawdata[i].trim()) > 200) {
       data.push(createClassObject(rawdata, i));
     }
   }
@@ -43,7 +44,7 @@ const createClassObject = function(data, index = 0) {
   if (!Number(data[index]))
     return { 'error': 'could not parse integer class id.' };
 
-  if (data[index] < 1000)
+  if (data[index] <= 200)
     return { 'error': 'invalid class id submitted.' };
 
   let currentItem = __class_reset();
@@ -62,7 +63,7 @@ const createClassObject = function(data, index = 0) {
       prof: data[index + 19] ?? "N/A"
     }
   )
-
+  // 29 26
   // checking these indexes to see if there is a second schedule 
   if (!Number(data[index + 20]) && !Number(data[index + 20])) {
     if (is_empty(data[index + 19])) // if the class does not have a prof on the default schedule
