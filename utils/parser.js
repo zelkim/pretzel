@@ -4,7 +4,7 @@ const { PythonShell } = require('python-shell');
 const buildClassEmbed = function(data) {
   const { EmbedBuilder } = require('discord.js')
   const embed = new EmbedBuilder()
-    .setTitle(`${data.class} (${data.section}) (gumana k n plz)`)
+    .setTitle(`${data.class} (${data.section})`)
     .setDescription(`ID: \`${data.id}\` | Capacity: \`${data.current_slots}/${data.max_slots}\` | Type: \`${data.type.trim()}\``)
     .addFields(
       {
@@ -14,7 +14,7 @@ const buildClassEmbed = function(data) {
       }
     )
     .setThumbnail("https://altdsi.dlsu.edu.ph/uploads/img/logo/dlsulogowhite.png")
-    .setColor("#FF0000");
+    .setColor("#77fd92");
 
   return embed;
 }
