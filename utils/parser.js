@@ -15,14 +15,17 @@ const buildClassEmbed = function(data) {
     )
     .setThumbnail("https://altdsi.dlsu.edu.ph/uploads/img/logo/dlsulogowhite.png")
     .setColor("#77fd92");
-
+  // .setColor("#FFF000");
   return embed;
 }
 
 const fetchCourseClasses = async function(course = '') {
 
-  if (Date.now() - await classLastUpdated(course.toLowerCase()) > 30000)
-    updateClass(course.toLowerCase());
+  const lastUpdated = await classLastUpdated(course.toLowerCase());
+  if (Date.now() - lastUpdated > 15000) {
+    if (Date.now() - lastUpdated > 60000) await updateClass(course.toLowerCase());
+    else updateClass(course.toLowerCase());
+  }
 
   let raw = fs.readFileSync(`./raw/${course.toLowerCase()}.json`);
 
