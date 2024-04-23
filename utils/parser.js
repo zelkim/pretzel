@@ -14,8 +14,8 @@ const buildClassEmbed = function(data) {
       }
     )
     .setThumbnail("https://altdsi.dlsu.edu.ph/uploads/img/logo/dlsulogowhite.png")
-    // .setColor("#77fd92");
-    .setColor("#FFF000");
+    .setColor("#77fd92");
+  // .setColor("#FFF000");
   return embed;
 }
 
