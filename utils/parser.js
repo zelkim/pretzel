@@ -13,7 +13,7 @@ const buildClassEmbed = function(data) {
         inline: false
       }
     )
-    .setThumbnail("https://altdsi.dlsu.edu.ph/uploads/img/logo/dlsulogowhite.png")
+    .setThumbnail("https://i.imgur.com/hgPMQBL.png")
     .setColor("#77fd92");
   // .setColor("#FFF000");
   return embed;
