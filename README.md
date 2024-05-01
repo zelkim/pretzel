@@ -45,11 +45,13 @@ Thank you for considering contributing to Pretzel! Contributions are highly valu
 
 ### Bug Reports and Feature Requests:
 If you encounter a bug or have an idea for a new feature, please open an issue on the GitHub repository. Be sure to provide detailed information about the bug or feature request, including steps to reproduce the issue if applicable.
+
 **Code Contributions:**
 1. Fork the repository and create a new branch for your contribution.
 2. Make your changes and ensure they adhere to the project's coding standards.
 3. Test your changes thoroughly.
 4. Submit a pull request with a clear description of the changes you've made and the problem or feature they address.
+   
 **Review and Feedback:**
 Even if you're not contributing code directly, reviewing pull requests, providing feedback, and testing changes are valuable contributions to the project.
 Before contributing, please review the Code of Conduct to ensure a positive and inclusive community environment.
