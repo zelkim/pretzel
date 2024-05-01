@@ -1,7 +1,7 @@
-## About the Project
+## Pretzel - Porting MLS to Discord.
 <img src='https://img.shields.io/badge/DLSU-ORGLIFE-100000?style=for-the-badge&logoColor=white&labelColor=00703C&color=333333'/>  <img alt='' src='https://img.shields.io/badge/DLSU-CCS-100000?style=for-the-badge&logo=&logoColor=white&labelColor=00703C&color=333333'/>  <img alt='' src='https://img.shields.io/badge/LSCS-zel-100000?style=for-the-badge&logo=&logoColor=white&labelColor=01087D&color=001DCB'/>
 
-Pretzel is a Discord bot tailored specifically for De La Salle University students, offering seamless class selection integration within Discord servers. Powered by web scraping technology, Pretzel autonomously retrieves real-time data from the university's official listing page, ensuring up-to-date information on available classes for the current trimester. Built with efficiency in mind, Pretzel provides users with a technical edge by delivering comprehensive course details directly to their Discord channels. Embrace the convenience of Pretzel and revolutionize your class registration experience today.
+Pretzel is a Discord bot that ports the My.LaSalle course offerings page into a Discord bot, offering seamless class selection integration within Discord servers. Powered by web scraping technology, Pretzel autonomously retrieves real-time data from the university's official listing page, ensuring up-to-date information on available classes for the current trimester. Built with efficiency in mind, Pretzel provides users with a technical edge by delivering comprehensive course details directly to their Discord channels. Embrace the convenience of Pretzel and revolutionize your class registration experience today.
 Step-by-step guide on how to install your project.
 
 ## Installation
