@@ -1,6 +1,3 @@
-## Discontinued.
-This discord bot currently uses an innefficient method of getting the classes. I have made an improved method of getting classes that you can use even outside of discord bots, introducing [ArcherAPI](https://github.com/zelkim/archer-api).
-
 ## Pretzel - Porting MLS to Discord.
 <img src='https://img.shields.io/badge/DLSU-ORGLIFE-100000?style=for-the-badge&logoColor=white&labelColor=00703C&color=333333'/>  <img alt='' src='https://img.shields.io/badge/DLSU-CCS-100000?style=for-the-badge&logo=&logoColor=white&labelColor=00703C&color=333333'/>  <img alt='' src='https://img.shields.io/badge/LSCS-zel-100000?style=for-the-badge&logo=&logoColor=white&labelColor=01087D&color=001DCB'/>
 
