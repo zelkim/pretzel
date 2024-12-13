@@ -5,6 +5,14 @@ Pretzel is a Discord bot that ports the My.LaSalle course offerings page into a 
 Step-by-step guide on how to install your project.
 
 ## Installation
+### Install `selenium-driverless`
+1. Have **Google Chrome** installed
+2. Have Python and pip installed.
+3. Run the following command:
+```
+pip install selenium-driverless
+```
+
 ### Clone the repository
 ```
 git clone github.com/zelkim/pretzel
